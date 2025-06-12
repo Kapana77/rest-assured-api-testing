@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="RestassuredTests" verbose="1" parallel="false">
+    <test name="tests">
+        <classes>
+            <class name="tests.BookstoreTest"/>
+            <class name="tests.LibraryTest"/>
+            <class name="tests.PetstoreTest"/>
+        </classes>
+    </test>
+</suite>
