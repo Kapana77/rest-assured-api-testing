@@ -53,6 +53,28 @@ public class Constants {
     public static final String EXPECTED_PLACE1 = "England";
     public static final String EXPECTED_PLACE2 = "Hogwarts School of Witchcraft and Wizardry";
     public static final String EXPECTED_PLACE3 = "Platform Nine and Three-quarters";
+    public static final String DRIVERS_BASE = "https://api.jolpi.ca";
+    public static final String EXPETCED_VERSTAPPEN = "Verstappen";
+    public static final String BRAZIL = "Brazilian";
+    public static final String CANADIAN = "Canadian";
+    public static final String EXPECTED_ITEM = "Lance Stroll";
+    public static final String DRIVERS_ERGAST = "/ergast/f1/2025/drivers";
+    public static final String EXP_AUTHOR1 = "Richard E. Silverman";
+    public static final String EXP_AUTHOR2 = "Addy Osmani";
+    public static final String BOOKSTORE_URL = "https://bookstore.toolsqa.com/BookStore/v1";
+    public static final String NO_PET_ERROR = "pet not found";
+    public static final String BOOKER_URL = "https://restful-booker.herokuapp.com";
+    public static final String NAME = "randomname";
+    public static final String LAST_NAME = "randomlastname";
+    public static final String NEEDS = "breakfast";
+    public static final String CHECKIN = "2025-06-12";
+    public static final String CHECKOUT = "2025-06-30";
+    public static final String UPDATED_NAME = "changedname";
+    public static final String UPDATED_LAST_NAME = "changedlastname";
+    public static final String UPDATED_NEEDS = "updated additionalneeds";
+    public static final String UPDATED_CHECKIN = "2025-06-13";
+    public static final String UPDATED_CHECKOUT = "2025-07-03";
+    public static final String DUTCH = "Dutch";
 
 
 
