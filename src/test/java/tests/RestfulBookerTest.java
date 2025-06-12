@@ -17,7 +17,7 @@ public class RestfulBookerTest {
         RestfulBookerSteps steps = new RestfulBookerSteps();
         BookingRequests requests = new BookingRequests();
 
-        String token = steps.createToken("user", "pass");
+        String token = steps.createToken("admin", "password123");
 
         JSONObject createBody = requests.buildBooking(Constants.NAME, Constants.LAST_NAME, 99999, true,
                 Constants.NEEDS,requests.buildBookingDates(Constants.CHECKIN, Constants.CHECKOUT)
