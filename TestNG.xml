@@ -3,9 +3,11 @@
 <suite name="RestassuredTests" verbose="1" parallel="false">
     <test name="tests">
         <classes>
-            <class name="tests.BookstoreTest"/>
-            <class name="tests.LibraryTest"/>
-            <class name="tests.PetstoreTest"/>
+            <class name="tests.DriversTest"/>
+            <class name="tests.MoreBookStoreTests"/>
+            <class name="tests.MorePetStoreTests"/>
+            <class name="tests.RestfulBookerTest"/>
+            <class name="tests.UploadTest"/>
         </classes>
     </test>
 </suite>
