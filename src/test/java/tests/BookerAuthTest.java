@@ -26,24 +26,24 @@ public class BookerAuthTest {
 
     @Test(priority = 1)
     public void createBookingTest() {
-        Booking request = new Booking();
-        request.setFirstname(faker.name().firstName());
-        request.setLastname(faker.name().lastName());
-        request.setTotalprice(150);
-        request.setDepositpaid(true);
-        request.setBookingdates(new BookingDates(Constants.CHECKIN, Constants.CHECKOUT));
-        request.setAdditionalneeds(Constants.BREAKFST);
+        Booking booking = new Booking();
+        booking.setFirstname(faker.name().firstName());
+        booking.setLastname(faker.name().lastName());
+        booking.setTotalprice(150);
+        booking.setDepositpaid(true);
+        booking.setBookingdates(new BookingDates(Constants.CHECKIN, Constants.CHECKOUT));
+        booking.setAdditionalneeds(Constants.BREAKFST);
 
-        bookingId = steps.createBooking(request);
+        bookingId = steps.createBooking(booking);
         Response bookingResponse = steps.getBooking(bookingId);
 
-        steps.assertBookingFirstName(bookingResponse, request)
-                .assertBookingLastName(bookingResponse, request)
-                .assertBookingPrice(bookingResponse, request)
-                .assertBookingDeposit(bookingResponse, request)
-                .assertBookingCheckin(bookingResponse, request)
-                .assertBookingCheckOut(bookingResponse, request)
-                .assertBookingNeeds(bookingResponse, request);
+        steps.assertBookingFirstName(bookingResponse, booking)
+                .assertBookingLastName(bookingResponse, booking)
+                .assertBookingPrice(bookingResponse, booking)
+                .assertBookingDeposit(bookingResponse, booking)
+                .assertBookingCheckin(bookingResponse, booking)
+                .assertBookingCheckOut(bookingResponse, booking)
+                .assertBookingNeeds(bookingResponse, booking);
     }
 
     @Test(priority = 2)
