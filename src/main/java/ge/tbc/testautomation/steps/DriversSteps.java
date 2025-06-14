@@ -1,21 +1,26 @@
 package ge.tbc.testautomation.steps;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ge.tbc.testautomation.data.Constants;
+import ge.tbc.testautomation.data.models.f1.Driver;
+import ge.tbc.testautomation.data.models.f1.MRDataResponse;
 import ge.tbc.testautomation.util.Logging;
 import io.restassured.response.Response;
 import org.slf4j.Logger;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 
 public class DriversSteps {
     private static final Logger logger = Logging.getLogger(DriversSteps.class);
-
+    private final ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public Response getDriversResponse() {
         return given()
@@ -27,96 +32,98 @@ public class DriversSteps {
                 .extract()
                 .response();
     }
+
+    private MRDataResponse mapResponse(Response response) {
+        try {
+            return mapper.readValue(response.asString(), MRDataResponse.class);
+        } catch (Exception e) {
+            throw new RuntimeException(Constants.ERR_MSG, e);
+        }
+    }
+
     public DriversSteps validateSeries(Response response) {
-        response.then()
-                .body("MRData.series", equalTo("f1"));
+        MRDataResponse data = mapResponse(response);
+        assertThat(data.getMrData().getSeries(), equalTo("f1"));
         return this;
     }
-    public DriversSteps validateSeason(Response response) {
 
-        response.then()
-                .body("MRData.DriverTable.season", equalTo("2025"));
+    public DriversSteps validateSeason(Response response) {
+        MRDataResponse data = mapResponse(response);
+        assertThat(data.getMrData().getDriverTable().getSeason(), equalTo("2025"));
         return this;
     }
 
     public DriversSteps validateTotalDriversCount(Response response) {
-        int total = response.jsonPath().getInt("MRData.total");
-        response.then()
-                .body("MRData.DriverTable.Drivers.size()", equalTo(total));
+        MRDataResponse data = mapResponse(response);
+        int expectedTotal = Integer.parseInt(data.getMrData().getTotal());
+        assertThat(data.getMrData().getDriverTable().getDrivers().size(), equalTo(expectedTotal));
         return this;
     }
 
     public DriversSteps firstDriverBefore1990(Response response) {
-        String driverName = response.jsonPath()
-                .getString("MRData.DriverTable.Drivers.find { it.dateOfBirth < '1990-01-01' }.givenName") +
-                " " +
-                response.jsonPath()
-                        .getString("MRData.DriverTable.Drivers.find { it.dateOfBirth < '1990-01-01' }.familyName");
-
-        response.then()
-                .body("MRData.DriverTable.Drivers.find { it.dateOfBirth < '1990-01-01' }.givenName", notNullValue())
-                .body("MRData.DriverTable.Drivers.find { it.dateOfBirth < '1990-01-01' }.familyName", notNullValue());
-
-        logger.info("first was : {}", driverName);
+        MRDataResponse data = mapResponse(response);
+        Driver first = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> d.getDateOfBirth().compareTo("1990-01-01") < 0)
+                .findFirst().orElseThrow();
+        logger.info("First born before 1990: {} {}", first.getGivenName(), first.getFamilyName());
+        assertThat(first.getGivenName(), notNullValue());
+        assertThat(first.getFamilyName(), notNullValue());
         return this;
-
-
     }
 
     public DriversSteps validateDriversBornAfter2000Count(Response response, int minCount) {
-        List<Map<String, String>> drivers = response.jsonPath()
-                .getList("MRData.DriverTable.Drivers.findAll { it.dateOfBirth > '2000-01-01' }");
-
-        List<String> driversAfter2000 = drivers.stream()
-                .map(d -> d.get("givenName") + " " + d.get("familyName"))
+        MRDataResponse data = mapResponse(response);
+        List<Driver> filtered = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> d.getDateOfBirth().compareTo("2000-01-01") > 0)
                 .toList();
-
-        response.then()
-                .body("MRData.DriverTable.Drivers.findAll { it.dateOfBirth > '2000-01-01' }.size()", greaterThanOrEqualTo(minCount));
-
-        logger.info("born after 2000 : {}", driversAfter2000);
+        logger.info("Born after 2000: {}", filtered.size());
+        assertThat(filtered.size(), greaterThanOrEqualTo(minCount));
         return this;
     }
 
     public DriversSteps validateFrenchDriversCount(Response response, int expectedCount) {
-        response.then()
-                .body("MRData.DriverTable.Drivers.findAll { it.nationality == 'French' }.size()", equalTo(expectedCount));
+        MRDataResponse data = mapResponse(response);
+        long count = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> "French".equals(d.getNationality())).count();
+        assertThat((int) count, equalTo(expectedCount));
         return this;
     }
 
     public DriversSteps validateDriversWithFamilyNameAorB(Response response, int minCount) {
-        response.then()
-                .body("MRData.DriverTable.Drivers.findAll { it.familyName ==~ /A.*/ || it.familyName ==~ /B.*/ }.size()", greaterThanOrEqualTo(minCount));
+        MRDataResponse data = mapResponse(response);
+        long count = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> d.getFamilyName().startsWith("A") || d.getFamilyName().startsWith("B"))
+                .count();
+        assertThat((int) count, greaterThanOrEqualTo(minCount));
         return this;
     }
 
     public DriversSteps validateBritishDriversAfter1990(Response response, int minCount) {
-        response.then()
-                .body("MRData.DriverTable.Drivers.findAll { it.nationality == 'British' && it.dateOfBirth > '1990-01-01' }.size()", greaterThanOrEqualTo(minCount));
+        MRDataResponse data = mapResponse(response);
+        long count = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> "British".equals(d.getNationality()) && d.getDateOfBirth().compareTo("1990-01-01") > 0)
+                .count();
+        assertThat((int) count, greaterThanOrEqualTo(minCount));
         return this;
     }
 
     public DriversSteps validateDriversWpermnumberAndname(Response response, int minCount) {
-        List<Map<String, Object>> filteredDrivers = response.jsonPath()
-                .getList("MRData.DriverTable.Drivers.findAll { it.permanentNumber.toInteger() < 10 || it.familyName.length() > 7 }");
-
-        List<String> drivers = filteredDrivers.stream()
-                .map(d -> d.get("givenName") + " " + d.get("familyName"))
+        MRDataResponse data = mapResponse(response);
+        List<Driver> filtered = data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d ->
+                        (d.getPermanentNumber() != null && Integer.parseInt(d.getPermanentNumber()) < 10) || (d.getFamilyName().length() > 7)
+                )
                 .toList();
-
-        response.then()
-                .body("MRData.DriverTable.Drivers.findAll { it.permanentNumber.toInteger() < 10 || it.familyName.length() > 7 }.size()", greaterThanOrEqualTo(minCount));
-
+        assertThat(filtered.size(), greaterThanOrEqualTo(minCount));
         return this;
-
     }
 
     public List<String> findDriversByNationality(Response response, String nationality) {
-        List<Map<String, Object>> filteredDrivers = response.jsonPath()
-                .getList("MRData.DriverTable.Drivers.findAll { it.nationality == '" + nationality + "' }");
-
-        return filteredDrivers.stream()
-                .map(driver -> driver.get("givenName") + " " + driver.get("familyName"))
-                .toList();    }
+        MRDataResponse data = mapResponse(response);
+        return data.getMrData().getDriverTable().getDrivers().stream()
+                .filter(d -> nationality.equals(d.getNationality()))
+                .map(d -> d.getGivenName() + " " + d.getFamilyName())
+                .toList();
+    }
 
 }

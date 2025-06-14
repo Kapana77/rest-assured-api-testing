@@ -8,6 +8,9 @@
             <class name="tests.MorePetStoreTests"/>
             <class name="tests.RestfulBookerTest"/>
             <class name="tests.UploadTest"/>
+            <class name="tests.EscuelaJSTest"/>
+            <class name="tests.BookerAuthTest"/>
+            <class name="tests.BookStorePOJOTest"/>
         </classes>
     </test>
 </suite>

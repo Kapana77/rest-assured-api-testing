@@ -75,6 +75,13 @@ public class Constants {
     public static final String UPDATED_CHECKIN = "2025-06-13";
     public static final String UPDATED_CHECKOUT = "2025-07-03";
     public static final String DUTCH = "Dutch";
+    public static final String EXPECTED_LAST1 = "Nicholas C. Zakas";
+    public static final String EXPECTED_LAST2 = "Marijn Haverbeke";
+    public static final String ERR_MSG = "deserialization failed";
+    public static final String BREAKFST = "Breakfast";
+    public static final String ESC_BASEURI = "https://api.escuelajs.co/api";
+    public static final String AVATAR = "https://random.com/fake-avatar";
+    public static final String CATEGORY = "Dogs";
 
 
 

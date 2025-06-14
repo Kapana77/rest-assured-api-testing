@@ -1,38 +1,41 @@
 package ge.tbc.testautomation.data;
 
+import ge.tbc.testautomation.data.models.pets.Category;
+import ge.tbc.testautomation.data.models.pets.Pet;
+import ge.tbc.testautomation.data.models.pets.Status;
+import ge.tbc.testautomation.data.models.pets.Tag;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
 public class PetRequests {
 
-    private static final String BASE_URI = "https://petstore.swagger.io/v2";
+    private static final String BASE_URI = Constants.PETSTORE_BASEURI;
 
-    public JSONObject buildPetPayload(long id, String name, String status) {
-        JSONObject payload = new JSONObject();
-        payload.put("id", id);
-        payload.put("name", name);
-        payload.put("status", status);
-        payload.put("photoUrls", new JSONArray().put("url"));
-        return payload;
+    public Pet buildPetPayload(long id, String name, Status status) {
+        Category category = new Category(99, Constants.CATEGORY);
+        List<Tag> tags = List.of(new Tag(8, "friendly"));
+        List<String> photoUrls = List.of("url1", "url2", "url3");
+
+        return new Pet(id, category, name, photoUrls, tags, status);
     }
 
-    public Response addPet(JSONObject petPayload) {
+    public Response addPet(Pet pet) {
         return given()
                 .baseUri(BASE_URI)
                 .contentType(ContentType.JSON)
-                .body(petPayload.toString())
+                .body(pet)
                 .when()
                 .post("/pet");
     }
 
-    public Response findPetsByStatus(String status) {
+    public Response findPetsByStatus(Status status) {
         return given()
                 .baseUri(BASE_URI)
-                .queryParam("status", status)
+                .queryParam("status", status.getValue())
                 .when()
                 .get("/pet/findByStatus");
     }
