@@ -2,13 +2,13 @@ package ge.tbc.testautomation.data.models.booking;
 
 public class BookingResponse {
     private int bookingid;
-    private Booking booking;
+    private ge.tbc.testautomation.data.models.responses.booking.BookingResponse booking;
 
     public BookingResponse() {}
 
     public int getBookingid() { return bookingid; }
     public void setBookingid(int bookingid) { this.bookingid = bookingid; }
 
-    public Booking getBooking() { return booking; }
-    public void setBooking(Booking booking) { this.booking = booking; }
+    public ge.tbc.testautomation.data.models.responses.booking.BookingResponse getBooking() { return booking; }
+    public void setBooking(ge.tbc.testautomation.data.models.responses.booking.BookingResponse booking) { this.booking = booking; }
 }

@@ -82,6 +82,11 @@ public class Constants {
     public static final String ESC_BASEURI = "https://api.escuelajs.co/api";
     public static final String AVATAR = "https://random.com/fake-avatar";
     public static final String CATEGORY = "Dogs";
+    public static final String EXPECTED_NAME = "Kamino";
+    public static final String EXPECTED_TERRAIN = "ocean";
+    public static final String EXPECTED_URL = "https://www.swapi.tech/api/planets/10";
+    public static final String NAMES = "Names of Planets: ";
+
 
 
 

@@ -1,5 +1,8 @@
 package ge.tbc.testautomation.data.models.booking;
 
+import lombok.Getter;
+
+@Getter
 public class AuthBody {
     private String username;
     private String password;
@@ -9,6 +12,4 @@ public class AuthBody {
         this.password = password;
     }
 
-    public String getUsername() { return username; }
-    public String getPassword() { return password; }
 }

@@ -1,21 +1,25 @@
-package ge.tbc.testautomation.data.models.booking;
+package ge.tbc.testautomation.data.models.requests.booking;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ge.tbc.testautomation.data.models.booking.BookingDates;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Accessors;
-@ToString
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Accessors(chain = true)
-public class Booking {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class BookingRequest {
     private String firstname;
     private String lastname;
     private int totalprice;
     private boolean depositpaid;
     private BookingDates bookingdates;
     private String additionalneeds;
+    @JsonIgnore
+    private Double saleprice;
+    private String passportNo;
 }

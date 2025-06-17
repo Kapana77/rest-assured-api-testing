@@ -10,6 +10,8 @@ import io.restassured.response.Response;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
+import java.time.LocalDate;
+
 import static org.hamcrest.Matchers.equalTo;
 
 public class BookerAuthTest {
@@ -31,7 +33,7 @@ public class BookerAuthTest {
         booking.setLastname(faker.name().lastName());
         booking.setTotalprice(150);
         booking.setDepositpaid(true);
-        booking.setBookingdates(new BookingDates(Constants.CHECKIN, Constants.CHECKOUT));
+        booking.setBookingdates(new BookingDates(LocalDate.now(),LocalDate.now().plusDays(2)));
         booking.setAdditionalneeds(Constants.BREAKFST);
 
         bookingId = steps.createBooking(booking);
