@@ -1,11 +1,13 @@
 package ge.tbc.testautomation.steps;
 
+import ge.tbc.testautomation.data.models.pets.UploadImageResponse;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
 import java.io.File;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 
 public class UploadSteps {
@@ -21,19 +23,20 @@ public class UploadSteps {
     }
 
     public UploadSteps validateMetaData(Response response, String metadata) {
-        response.then().statusCode(200)
-                .body("message", containsString(metadata));
-        return this;
-    }
-    public UploadSteps validateImageName(Response response,String fileName) {
-        response.then().statusCode(200)
-                .body("message", containsString(fileName));
+        UploadImageResponse uploadResponse = response.then().statusCode(200).extract().as(UploadImageResponse.class);
+        assertThat(uploadResponse.getMessage(), containsString(metadata));
         return this;
     }
 
-    public UploadSteps validateSize(Response response,long expectedSize) {
-        response.then().statusCode(200)
-                .body("message", containsString(String.valueOf(expectedSize)));
+    public UploadSteps validateImageName(Response response, String fileName) {
+        UploadImageResponse uploadResponse = response.then().statusCode(200).extract().as(UploadImageResponse.class);
+        assertThat(uploadResponse.getMessage(), containsString(fileName));
+        return this;
+    }
+
+    public UploadSteps validateSize(Response response, long expectedSize) {
+        UploadImageResponse uploadResponse = response.then().statusCode(200).extract().as(UploadImageResponse.class);
+        assertThat(uploadResponse.getMessage(), containsString(String.valueOf(expectedSize)));
         return this;
     }
 }

@@ -1,43 +1,51 @@
 package ge.tbc.testautomation.steps;
 
+import ge.tbc.testautomation.data.models.booking.AuthBody;
+import ge.tbc.testautomation.data.models.booking.AuthResponse;
+import ge.tbc.testautomation.data.models.booking.Booking;
+import ge.tbc.testautomation.data.models.booking.BookingResponse;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONObject;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class RestfulBookerSteps {
-    public String createToken(String username, String password) {
-        JSONObject authBody = new JSONObject();
-        authBody.put("username", username);
-        authBody.put("password", password);
 
-        return given()
+    public String createToken(String username, String password) {
+        AuthResponse auth = given()
                 .contentType(ContentType.JSON)
-                .body(authBody.toString())
+                .body(new AuthBody(username, password))
                 .when()
                 .post("/auth")
                 .then()
-                .extract().path("token");
+                .statusCode(200)
+                .extract()
+                .as(AuthResponse.class);
+
+        return auth.getToken();
     }
 
-    public int createBooking(JSONObject body) {
-        return given()
+    public int createBooking(Booking bookingBody) {
+        BookingResponse response = given()
                 .contentType(ContentType.JSON)
-                .body(body.toString())
+                .body(bookingBody)
                 .when()
                 .post("/booking")
                 .then()
-                .extract().path("bookingid");
+                .statusCode(200)
+                .extract()
+                .as(BookingResponse.class);
+
+        return response.getBookingid();
     }
 
-    public Response updateBooking(int bookingId, String token, JSONObject body) {
+    public Response updateBooking(int bookingId, String token, Booking bookingBody) {
         return given()
                 .contentType(ContentType.JSON)
                 .cookie("token", token)
-                .body(body.toString())
+                .body(bookingBody)
                 .when()
                 .put("/booking/" + bookingId);
     }

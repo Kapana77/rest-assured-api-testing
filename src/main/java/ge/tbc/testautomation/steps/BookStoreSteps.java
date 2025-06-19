@@ -1,29 +1,33 @@
 package ge.tbc.testautomation.steps;
 
-import io.restassured.response.Response;
+import ge.tbc.testautomation.data.models.books.Book;
+import ge.tbc.testautomation.data.models.books.ResponseBook;
 
+import java.util.List;
+
+import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class BookStoreSteps {
 
-    public Response getAllBooks() {
-        return io.restassured.RestAssured.given()
+
+    public ResponseBook getAllBooksAsPojo() {
+        return given()
                 .when()
                 .get("/Books")
                 .then()
                 .statusCode(200)
-                .extract()
-                .response();
+                .extract().as(ResponseBook.class);
     }
 
-    public BookStoreSteps validateAllBooksPages(Response response, int maxPages) {
-        assertThat(response.jsonPath().getList("books.pages"), everyItem(lessThan(maxPages)));
+    public BookStoreSteps validateAllBooksPages(List<Book> books, int maxPages) {
+        assertThat(books, everyItem(hasProperty("pages", lessThan(maxPages))));
         return this;
     }
 
-    public BookStoreSteps validateAuthorOfBook(Response response, int bookIndex, String expectedAuthor) {
-        assertThat(response.jsonPath().getString("books[" + bookIndex + "].author"), equalTo(expectedAuthor));
+    public BookStoreSteps validateAuthorOfBook(List<Book> books, int index, String expectedAuthor) {
+        assertThat(books.get(index).getAuthor(), equalTo(expectedAuthor));
         return this;
     }
 }
