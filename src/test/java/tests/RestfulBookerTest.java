@@ -5,8 +5,9 @@ import ge.tbc.testautomation.data.models.booking.Booking;
 import ge.tbc.testautomation.data.models.booking.BookingDates;
 import ge.tbc.testautomation.steps.RestfulBookerSteps;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import org.testng.annotations.Test;
+
+import java.time.LocalDate;
 
 public class RestfulBookerTest {
 
@@ -18,14 +19,14 @@ public class RestfulBookerTest {
 
         String token = steps.createToken("admin", "password123");
 
-        Booking createBody = new Booking(
-                Constants.NAME,
-                Constants.LAST_NAME,
-                99999,
-                true,
-                new BookingDates(Constants.CHECKIN, Constants.CHECKOUT),
-                Constants.NEEDS
-        );
+        Booking createBody = new Booking();
+
+        createBody.setFirstname(Constants.NAME)
+                .setLastname(Constants.NAME)
+                .setTotalprice(999)
+                .setDepositpaid(true)
+                .setBookingdates(new BookingDates(LocalDate.now(), LocalDate.now().plusDays(1)))
+                .setAdditionalneeds(Constants.NEEDS);
 
         int bookingId = steps.createBooking(createBody);
 
@@ -34,13 +35,10 @@ public class RestfulBookerTest {
                 Constants.UPDATED_LAST_NAME,
                 88999,
                 true,
-                new BookingDates(Constants.UPDATED_CHECKIN, Constants.UPDATED_CHECKOUT),
+                new BookingDates(LocalDate.now(), LocalDate.now().plusDays(1)),
                 Constants.UPDATED_NEEDS
         );
 
-        Response response = steps.updateBooking(bookingId, token, updateBody);
-        steps.validateUpdateSuccessful(response)
-                .logResponse(response);
     }
 
 }

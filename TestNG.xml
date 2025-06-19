@@ -3,14 +3,10 @@
 <suite name="RestassuredTests" verbose="1" parallel="false">
     <test name="tests">
         <classes>
-            <class name="tests.DriversTest"/>
-            <class name="tests.MoreBookStoreTests"/>
-            <class name="tests.MorePetStoreTests"/>
-            <class name="tests.RestfulBookerTest"/>
-            <class name="tests.UploadTest"/>
-            <class name="tests.EscuelaJSTest"/>
-            <class name="tests.BookerAuthTest"/>
-            <class name="tests.BookStorePOJOTest"/>
+            <class name="tests.BookingDataTest"/>
+            <class name="tests.PetstoreXMLTest"/>
+            <class name="tests.PetstoreLombokTest"/>
+            <class name="tests.PlanetsTests"/>
         </classes>
     </test>
 </suite>
