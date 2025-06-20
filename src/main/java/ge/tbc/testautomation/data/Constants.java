@@ -12,16 +12,16 @@ public class Constants {
     public static final String PATH_ISBN = "isbn";
     public static final String PATH_DATE = "publish_date";
     public static final String PATH_PAGES = "pages";
-    public static final String ORDER_BODY =  """
-                {
-                    "id": 999,
-                    "petId": 888,
-                    "quantity": 2,
-                    "shipDate": "2025-06-09T00:00:00.000Z",
-                    "status": "placed",
-                    "complete": true
-                }
-                """;
+    public static final String ORDER_BODY = """
+            {
+                "id": 999,
+                "petId": 888,
+                "quantity": 2,
+                "shipDate": "2025-06-09T00:00:00.000Z",
+                "status": "placed",
+                "complete": true
+            }
+            """;
     public static final String PATH_ORDER = "/store/order";
     public static final int EXPECTED_ID = 999;
     public static final int EXPECTED_PET_ID = 888;
@@ -31,7 +31,7 @@ public class Constants {
     public static final String PATH_PETID = "petId";
     public static final String PATH_STATUS = "status";
     public static final String PATH_SHIPDATE = "shipDate";
-    public static final String PETSTORE_BASEURI ="https://petstore.swagger.io/v2";
+    public static final String PETSTORE_BASEURI = "https://petstore.swagger.io/v2";
     public static final String PARAM_NAME = "randomname";
     public static final String PARAM_STATUS = "available";
     public static final String EXPECTED_TYPE = "unknown";
@@ -69,7 +69,6 @@ public class Constants {
     public static final String NEEDS = "breakfast";
     public static final String CHECKIN = "2025-06-12";
     public static final String CHECKOUT = "2025-06-30";
-    public static final String UPDATED_NAME = "changedname";
     public static final String UPDATED_LAST_NAME = "changedlastname";
     public static final String UPDATED_NEEDS = "updated additionalneeds";
     public static final String UPDATED_CHECKIN = "2025-06-13";
@@ -91,18 +90,33 @@ public class Constants {
     public static final String READ = "READ_PRIVILEGE";
     public static final String WRITE = "WRITE_PRIVILEGE";
     public static final String DELETE = "DELETE_PRIVILEGE";
-    public static final String UPDATE =  "UPDATE_PRIVILEGE";
+    public static final String UPDATE = "UPDATE_PRIVILEGE";
     public static final String ADM = "ROLE_ADMIN";
+    public static final long TESTID = 99L;
     public static final String VALIDATION_MSG = "Hello, you have access to a protected resource";
-
-
-
-
-
-
-
-
-
+    public static final String LOCAL_URL = "http://localhost:8087/ws";
+    public static final String ADD_ACT = "interfaces.soap.springboot.example.com/exampleSoapHttp/addEmployeeRequest";
+    public static final String RAND_ADDR = "address";
+    public static final String DEP = "dep";
+    public static final String ADDED_MESSAGE = "Content Added Successfully";
+    public static final String GETBYID_ACT = "interfaces.soap.springboot.example.com/exampleSoapHttp/getEmployeeByIdRequest";
+    public static final String UPDATED_NAME = "newname";
+    public static final String UPDATED_DEP = "newdep";
+    public static final String UPDATED_ADDRESS = "newaddress";
+    public static final String UPDATE_ACT = "interfaces.soap.springboot.example.com/exampleSoapHttp/updateEmployeeRequest";
+    public static final String UPDATED_MESSAGE = "Content Updated Successfully";
+    public static final long NEW_TESTID = 77L;
+    public static final String DELETE_ACT = "interfaces.soap.springboot.example.com/exampleSoapHttp/deleteEmployeeRequest";
+    public static final String DELETED_MESSAGE = "Content Deleted Successfully";
+    public static final String AFRICA = "Africa";
+    public static final String ANTARCTICA = "Antarctica";
+    public static final String ASIA = "Asia";
+    public static final String EUROPE = "Europe";
+    public static final String OCENANIA = "Ocenania";
+    public static final String THE_AMERICAS = "The Americas";
+    public static final String NO_OCENANIA_ERROR = "No ocenania found";
+    public static final String C_BASEURI = "http://webservices.oorsprong.org";
+    public static final String COUNTRY_BASEPATH = "/websamples.countryinfo/CountryInfoService.wso";
 
 
 }

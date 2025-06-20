@@ -14,6 +14,7 @@ import io.restassured.common.mapper.TypeRef;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.response.Response;
 import local.spring.api.AuthenticationApi;
 import local.spring.invoker.ApiClient;
 import local.spring.model.AuthenticationResponse;
@@ -67,7 +68,7 @@ public class SpringTests {
                 .password(invalidPassword)
                 .role(RegisterRequest.RoleEnum.ADMIN);
 
-        var resp = authApi.register()
+        Response resp = authApi.register()
                 .body(request)
                 .execute(r -> r.then().statusCode(400).extract().response());
 
