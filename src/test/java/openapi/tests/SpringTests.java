@@ -3,6 +3,7 @@ package openapi.tests;
 import com.github.javafaker.Faker;
 import ge.tbc.testautomation.data.Constants;
 import ge.tbc.testautomation.data.DataSupplier;
+import ge.tbc.testautomation.steps.integration.IntegrationFlowSteps;
 import ge.tbc.testautomation.steps.openapi.AuthSteps;
 import ge.tbc.testautomation.util.AllureRestAssuredFilterSetup;
 import io.qameta.allure.Description;
@@ -15,22 +16,25 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
-import local.spring.api.AuthenticationApi;
+import local.spring.api.AuthenticationV1CookiesBasedApi;
 import local.spring.invoker.ApiClient;
 import local.spring.model.AuthenticationResponse;
+import local.spring.model.ErrorResponse;
 import local.spring.model.RefreshTokenResponse;
-import local.spring.model.RegisterRequest;
+import local.spring.model.RegisterUserRequest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
 @Feature("local spring api")
 
 public class SpringTests {
     private ApiClient apiClient;
-    private AuthenticationApi authApi;
+    private AuthenticationV1CookiesBasedApi authApi;
     private Faker faker;
     private AuthSteps authSteps;
 
@@ -44,7 +48,7 @@ public class SpringTests {
                         .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
                 )
         );
-        authApi = apiClient.authentication();
+        authApi = apiClient.authenticationV1CookiesBased();
         faker = new Faker();
         authSteps = new AuthSteps(authApi, "http://localhost:8086");
     }
@@ -61,14 +65,14 @@ public class SpringTests {
     @Severity(SeverityLevel.CRITICAL)
     @Test(dataProvider = "invalidPasswords", dataProviderClass = DataSupplier.class)
     public void registrationShouldFailWithInvalidPasswords(String invalidPassword) {
-        RegisterRequest request = new RegisterRequest()
+        RegisterUserRequest request = new RegisterUserRequest()
                 .firstname(faker.name().firstName())
                 .lastname(faker.name().lastName())
                 .email(faker.internet().emailAddress())
                 .password(invalidPassword)
-                .role(RegisterRequest.RoleEnum.ADMIN);
+                .role(RegisterUserRequest.RoleEnum.ADMIN);
 
-        Response resp = authApi.register()
+        Response resp = authApi.register1()
                 .body(request)
                 .execute(r -> r.then().statusCode(400).extract().response());
 

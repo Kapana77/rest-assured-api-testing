@@ -3,8 +3,11 @@
 <suite name="RestassuredTests" verbose="1" parallel="false">
     <test name="tests">
         <classes>
-            <class name="soap.tests.ContinentsTest"/>
-            <class name="soap.tests.EmployeesTest"/>
+            <class name="integration.tests.SoapValidationTests"/>
+            <class name="integration.tests.DataPreparationTests"/>
+            <class name="integration.tests.IntegrationFlowTests"/>
+            <class name="integration.tests.SoapDemoTests"/>
+<!--            <class name="integration.tests.MockServiceTests"/>-->
         </classes>
     </test>
 </suite>

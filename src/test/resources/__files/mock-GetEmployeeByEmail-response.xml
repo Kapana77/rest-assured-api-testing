@@ -1,0 +1,14 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:getEmployeeByEmailResponse xmlns:ns2="http://interfaces.soap.springboot.example.com">
+            <ns2:employeeInfo>
+                <ns2:employeeId>88</ns2:employeeId>
+                <ns2:name>somename</ns2:name>
+                <ns2:department>somedep</ns2:department>
+                <ns2:address>address2</ns2:address>
+                <ns2:email>somegmailasfasfa@gmail.com</ns2:email>
+            </ns2:employeeInfo>
+        </ns2:getEmployeeByEmailResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

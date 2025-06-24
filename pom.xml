@@ -163,6 +163,51 @@
             <version>20250517</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-value-constructor</artifactId>
+            <version>3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.sun.xml.messaging.saaj</groupId>
+            <artifactId>saaj-impl</artifactId>
+            <version>1.5.3</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wiremock</groupId>
+            <artifactId>wiremock</artifactId>
+            <version>3.5.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-ri</artifactId>
+            <version>4.0.2</version>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
             <artifactId>jaxb2-fluent-api</artifactId>
@@ -178,28 +223,6 @@
             <artifactId>cxf-xjc-ts</artifactId>
             <version>4.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.jvnet.jaxb2_commons</groupId>
-            <artifactId>jaxb2-value-constructor</artifactId>
-            <version>3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.2.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>4.0.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.messaging.saaj</groupId>
-            <artifactId>saaj-impl</artifactId>
-            <version>1.5.3</version>
-        </dependency>
 
 
         <!-- logging -->
@@ -213,7 +236,22 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
+
+        <!--database -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.5.16</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.3.232</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
+
 
     <build>
         <plugins>
@@ -288,7 +326,8 @@
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-sources/openapi/src/main/java</source>
-                                <source>${project.build.directory}/generated-sources/local-spring-api/src/main/java</source>
+                                <source>${project.build.directory}/generated-sources/local-spring-api/src/main/java
+                                </source>
 
                             </sources>
                         </configuration>
@@ -303,7 +342,8 @@
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
                     <compileSourceRoots>
-                        <compileSourceRoot>${project.build.directory}/generated-sources/openapi/src/main/java</compileSourceRoot>
+                        <compileSourceRoot>${project.build.directory}/generated-sources/openapi/src/main/java
+                        </compileSourceRoot>
                     </compileSourceRoots>
                     <annotationProcessorPaths>
                         <path>
@@ -361,22 +401,78 @@
                 <version>4.0.4</version>
                 <executions>
                     <execution>
-                        <id>generate-sources</id>
+                        <id>generate-all-sources</id>
                         <phase>generate-sources</phase>
-                        <configuration>
-                            <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
-                            <wsdlOptions>
-                                <wsdlOption>
-                                    <wsdl>${project.basedir}/src/main/resources/wsdl/employees.wsdl</wsdl>
-                                </wsdlOption>
-                            </wsdlOptions>
-                        </configuration>
                         <goals>
                             <goal>wsdl2java</goal>
                         </goals>
+                        <configuration>
+                            <additionalJvmArgs>
+                                -Djavax.xml.accessExternalDTD=all -Djavax.xml.accessExternalSchema=all
+                            </additionalJvmArgs>
+                            <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/employeesupdated.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>asd.newproject.second</extraarg>
+                                        <extraarg>-validate</extraarg>
+                                        <extraarg>-xjc-Xfluent-api</extraarg>
+                                        <extraarg>
+                                            -xjc-Xts:style:org.apache.commons.lang3.builder.ToStringStyle.DEFAULT_STYLE
+                                        </extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+
+                                <wsdlOption>
+                                    <wsdl>${project.basedir}/src/main/resources/wsdl/SOAP.Demo.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-p</extraarg>
+                                        <extraarg>org.newproject</extraarg>
+                                        <extraarg>-validate</extraarg>
+                                        <extraarg>-xjc-Xfluent-api</extraarg>
+                                        <extraarg>
+                                            -xjc-Xts:style:org.apache.commons.lang3.builder.ToStringStyle.DEFAULT_STYLE
+                                        </extraarg>
+                                    </extraargs>
+                                    <bindingFiles>
+                                        <bindingFile>http://www.w3.org/2001/XMLSchema.xsd</bindingFile>
+                                        <bindingFile>${project.basedir}/src/main/resources/wsdl/bindings.xml
+                                        </bindingFile>
+                                    </bindingFiles>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
                     </execution>
                 </executions>
-
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-fluent-api</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjc-utils</groupId>
+                        <artifactId>cxf-xjc-runtime</artifactId>
+                        <version>4.0.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjcplugins</groupId>
+                        <artifactId>cxf-xjc-ts</artifactId>
+                        <version>4.0.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-value-constructor</artifactId>
+                        <version>3.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                        <version>3.2.1</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
