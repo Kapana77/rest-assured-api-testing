@@ -86,6 +86,17 @@ public class Constants {
     public static final String EXPECTED_TERRAIN = "ocean";
     public static final String EXPECTED_URL = "https://www.swapi.tech/api/planets/10";
     public static final String NAMES = "Names of Planets: ";
+    public static final String PASS_ERROR = "Must be 8 characters long and combination of uppercase letters, lowercase letters, numbers, special characters.";
+    public static final String EXP_PETNAME = "Doggo";
+    public static final String READ = "READ_PRIVILEGE";
+    public static final String WRITE = "WRITE_PRIVILEGE";
+    public static final String DELETE = "DELETE_PRIVILEGE";
+    public static final String UPDATE =  "UPDATE_PRIVILEGE";
+    public static final String ADM = "ROLE_ADMIN";
+    public static final String VALIDATION_MSG = "Hello, you have access to a protected resource";
+
+
+
 
 
 

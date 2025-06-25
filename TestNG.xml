@@ -3,10 +3,8 @@
 <suite name="RestassuredTests" verbose="1" parallel="false">
     <test name="tests">
         <classes>
-            <class name="tests.BookingDataTest"/>
-            <class name="tests.PetstoreXMLTest"/>
-            <class name="tests.PetstoreLombokTest"/>
-            <class name="tests.PlanetsTests"/>
+            <class name="openapi.tests.SpringTests"/>
+            <class name="openapi.tests.StoreOrderTest"/>
         </classes>
     </test>
 </suite>

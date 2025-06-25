@@ -45,4 +45,18 @@ public class DataSupplier {
         }
         return out;
     }
+
+    @DataProvider
+    public Object[][] invalidPasswords() {
+        return new Object[][] {
+                { "abc" },                 // Too short
+                { "12345" },               // Only digits, too short
+                { "abcdefg" },             // Only lowercase, 7 chars
+                { "ABCDEFG" },             // Only uppercase, 7 chars
+                { "1234ABC" },             // digits + uppercase, 7 chars
+                { "!@#$%^&" },             // special chars, 7 chars
+                { "Ab1!" },                // too short but mixed
+                { faker.lorem().characters(1,7) } // random 7 char string
+        };
+    }
 }
