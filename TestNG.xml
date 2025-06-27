@@ -3,8 +3,8 @@
 <suite name="RestassuredTests" verbose="1" parallel="false">
     <test name="tests">
         <classes>
-            <class name="openapi.tests.SpringTests"/>
-            <class name="openapi.tests.StoreOrderTest"/>
+            <class name="soap.tests.ContinentsTest"/>
+            <class name="soap.tests.EmployeesTest"/>
         </classes>
     </test>
 </suite>

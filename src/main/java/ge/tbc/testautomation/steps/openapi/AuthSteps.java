@@ -15,6 +15,10 @@ import local.spring.model.*;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.error.ShouldHave.shouldHave;
+import static pet.store.v3.invoker.ResponseSpecBuilders.shouldBeCode;
+import static pet.store.v3.invoker.ResponseSpecBuilders.validatedWith;
+
 public class AuthSteps {
 
     private final AuthenticationApi authApi;
@@ -39,11 +43,11 @@ public class AuthSteps {
                 .password(testPassword)
                 .role(RegisterRequest.RoleEnum.ADMIN);
 
-        Response response = authApi.register()
+        AuthenticationResponse response = authApi.register()
                 .body(request)
-                .execute(res -> res.then().statusCode(200).extract().response());
+                .executeAs(validatedWith(shouldBeCode(200)));
 
-        return response.as(AuthenticationResponse.class);
+        return response;
     }
 
     @Step("Authenticate with email and password")
