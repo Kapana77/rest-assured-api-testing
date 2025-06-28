@@ -8,7 +8,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
-import local.spring.api.AuthenticationApi;
+import local.spring.api.AuthenticationV1CookiesBasedApi;
 import local.spring.api.AuthorizationApi;
 import local.spring.model.*;
 
@@ -21,13 +21,15 @@ import static pet.store.v3.invoker.ResponseSpecBuilders.validatedWith;
 
 public class AuthSteps {
 
-    private final AuthenticationApi authApi;
+    private final AuthenticationV1CookiesBasedApi authApi;
     private final String baseUri;
     private final Faker faker = new Faker();
     public String testEmail;
     public final String testPassword = "Admin@123";
 
-    public AuthSteps(AuthenticationApi authApi, String baseUri) {
+
+
+    public AuthSteps(AuthenticationV1CookiesBasedApi authApi, String baseUri) {
         this.authApi = authApi;
         this.baseUri = baseUri;
     }
@@ -36,14 +38,14 @@ public class AuthSteps {
     public AuthenticationResponse registerAdminUser(String email) {
         testEmail = email;
 
-        RegisterRequest request = new RegisterRequest()
+        RegisterUserRequest request = new RegisterUserRequest()
                 .firstname("adminname")
                 .lastname("adminlastname")
                 .email(email)
                 .password(testPassword)
-                .role(RegisterRequest.RoleEnum.ADMIN);
+                .role(RegisterUserRequest.RoleEnum.ADMIN);
 
-        AuthenticationResponse response = authApi.register()
+        AuthenticationResponse response = authApi.register1()
                 .body(request)
                 .executeAs(validatedWith(shouldBeCode(200)));
 
@@ -52,11 +54,11 @@ public class AuthSteps {
 
     @Step("Authenticate with email and password")
     public AuthenticationResponse authenticate(String email, String password) {
-        AuthenticationRequest request = new AuthenticationRequest()
+        LoginRequest request = new LoginRequest()
                 .email(email)
                 .password(password);
 
-        return authApi.authenticate()
+        return authApi.authenticate1()
                 .body(request)
                 .execute(res -> res.then().statusCode(200).extract().as(AuthenticationResponse.class));
     }
@@ -96,7 +98,7 @@ public class AuthSteps {
         RefreshTokenRequest request = new RefreshTokenRequest()
                 .refreshToken(refreshToken);
 
-        return authApi.refreshToken()
+        return authApi.refreshToken1()
                 .body(request)
                 .execute(r -> r.then()
                         .statusCode(200)

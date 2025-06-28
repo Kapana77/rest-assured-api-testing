@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings
+        xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb"
+        xmlns:s="http://www.w3.org/2001/XMLSchema"
+        version="3.0">
+
+    <!-- ByNameDataSet binding -->
+    <jaxb:bindings schemaLocation="schemas/ByNameDataSet.xsd" node="/s:schema">
+        <jaxb:bindings node="s:element[@name='ByNameDataSet']">
+            <jaxb:class name="ByNameDataSetCustom"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+    <!-- QueryByName_DataSet binding -->
+    <jaxb:bindings schemaLocation="schemas/QueryByNameDS.xsd" node="/s:schema">
+        <jaxb:bindings node="s:element[@name='QueryByName_DataSet']">
+            <jaxb:class name="QueryByNameDataSetCustom"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>

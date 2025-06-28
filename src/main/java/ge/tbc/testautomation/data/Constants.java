@@ -117,6 +117,32 @@ public class Constants {
     public static final String NO_OCENANIA_ERROR = "No ocenania found";
     public static final String C_BASEURI = "http://webservices.oorsprong.org";
     public static final String COUNTRY_BASEPATH = "/websamples.countryinfo/CountryInfoService.wso";
-
-
+    public static final long TESTID2 = 100L;
+    public static final String UPDATED_MAIL = "uppdatedmail@gmail.com";
+    public static final String UPDATED_PHONE = "598202020";
+    public static final Long UPDATED_SALARY = 9999L;
+    public static final String DEMO_URL = "https://www.crcind.com:443/csp/samples/SOAP.Demo.cls";
+    public static final String FIND_ACT = "http://tempuri.org/SOAP.Demo.FindPerson";
+    public static final String VALIDATEION_MSG2 = "Hello, you have access to a protected resource that requires admin role and read authority.";
+    public static final String BASE_LOCAL = "http://localhost:8086";
+    public static final String STRONG_PASS = "strongpass1234A@@";
+    public static final String UNKN_EMAIL = "unknownemail@gmail.com";
+    public static final String NEW_PASS = "NEWstrongpassword1@@!";
+    public static final String EXP_PERSONNAME = "Xavier,Joe I.";
+    public static final String RAND_MAIL = "email@gmail.com";
+    public static final String RAND_PHONE = "598949494";
+    public static final String REQ_BODY = """
+            {
+                "firstname": "MockFirst",
+                "lastname": "MockLast",
+                "email": "somegmailasfasfa@gmail.com",
+                "password": "StrongPass1234@!",
+                "role": "ADMIN"
+            }
+           """;
+    public static final String POST_API = "/api/v2/auth/register";
+    public static final String RAND_GMAIL2 = "somegmailasfasfa@gmail.com";
+    public static final String BASE_URI = "http://localhost:8086";
+    public static final String EMPLBYMAIL = "interfaces.soap.springboot.example.com/exampleSoapHttp/getEmployeeByEmailRequest";
+    public static final String SOAP_ERROR = "SOAP Fault EmployeeInfo not found: Source must not be null";
 }

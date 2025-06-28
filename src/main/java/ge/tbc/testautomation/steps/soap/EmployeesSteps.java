@@ -1,6 +1,6 @@
 package ge.tbc.testautomation.steps.soap;
 
-import com.example.springboot.soap.interfaces.*;
+import asd.newproject.second.*;
 import ge.tbc.testautomation.util.SoapServiceSender;
 import io.restassured.response.Response;
 

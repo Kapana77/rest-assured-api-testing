@@ -1,17 +1,24 @@
 openapi: 3.0.1
 info:
-  title: Spring Security 6+ APP
-  description: Spring Boot 3+ Spring Security 6+ example
-  version: 0.0.1-SNAPSHOT
+  title: Authentication API
+  description: "Authentication API for managing user authentication, registration,\
+    \ and authorization."
+  version: 1.0.0
 servers:
 - url: http://localhost:8086
   description: Development
 security:
 - bearerAuth: []
 tags:
-- name: Authentication
+- name: User Management
+  description: The User Management API. Contains operations for user-related actions
+    like changing password.
+- name: Authentication V1 (Cookies Based)
   description: "The Authentication API. Contains operations like login, logout, refresh-token\
     \ etc."
+- name: Authentication V2
+  description: "The Authentication API. JWT Based Contains operations like login,\
+    \ logout, refresh-token etc."
 - name: Authorization
   description: The Authorization API. Contains a secure hello method
 paths:
@@ -36,7 +43,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content:
@@ -63,23 +76,29 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content:
             '*/*':
               schema:
                 type: string
-  /api/v1/auth/register:
+  /api/v2/auth/register:
     post:
       tags:
-      - Authentication
+      - Authentication V2
       operationId: register
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterRequest'
+              $ref: "#/components/schemas/RegisterUserRequest"
         required: true
       responses:
         "400":
@@ -97,24 +116,30 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/AuthenticationResponse'
+                $ref: "#/components/schemas/AuthenticationResponse"
       security: []
-  /api/v1/auth/refresh-token:
+  /api/v2/auth/refresh-token:
     post:
       tags:
-      - Authentication
+      - Authentication V2
       operationId: refreshToken
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefreshTokenRequest'
+              $ref: "#/components/schemas/RefreshTokenRequest"
         required: true
       responses:
         "400":
@@ -132,18 +157,308 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/RefreshTokenResponse'
+                $ref: "#/components/schemas/RefreshTokenResponse"
+      security: []
+  /api/v2/auth/logout:
+    post:
+      tags:
+      - Authentication V2
+      operationId: revokeToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+      security: []
+  /api/v2/auth/info:
+    post:
+      tags:
+      - Authentication V2
+      operationId: getAuthentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content: {}
+      security: []
+  /api/v2/auth/authenticate:
+    post:
+      tags:
+      - Authentication V2
+      operationId: authenticate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: Success
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+      security: []
+  /api/v1/user/change-password:
+    post:
+      tags:
+      - User Management
+      operationId: changePassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePasswordRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/user/change-email:
+    post:
+      tags:
+      - User Management
+      operationId: changeEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangeEmailRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /api/v1/auth/register:
+    post:
+      tags:
+      - Authentication V1 (Cookies Based)
+      operationId: register_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/AuthenticationResponse"
+      security: []
+  /api/v1/auth/refresh-token:
+    post:
+      tags:
+      - Authentication V1 (Cookies Based)
+      operationId: refreshToken_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            '*/*':
+              schema:
+                oneOf:
+                - type: object
+                  additionalProperties:
+                    type: string
+                - type: string
+        "403":
+          description: Forbidden
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/RefreshTokenResponse"
       security: []
   /api/v1/auth/refresh-token-cookie:
     post:
       tags:
-      - Authentication
+      - Authentication V1 (Cookies Based)
       operationId: refreshTokenCookie
       responses:
         "400":
@@ -161,14 +476,20 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
       security: []
   /api/v1/auth/logout:
     post:
       tags:
-      - Authentication
+      - Authentication V1 (Cookies Based)
       operationId: logout
       responses:
         "400":
@@ -186,20 +507,26 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
       security: []
   /api/v1/auth/authenticate:
     post:
       tags:
-      - Authentication
-      operationId: authenticate
+      - Authentication V1 (Cookies Based)
+      operationId: authenticate_1
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthenticationRequest'
+              $ref: "#/components/schemas/LoginRequest"
         required: true
       responses:
         "400":
@@ -217,31 +544,37 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Success
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/AuthenticationResponse'
+                $ref: "#/components/schemas/AuthenticationResponse"
         "401":
           description: Unauthorized
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
       security: []
   /api/v1/auth/info:
     get:
       tags:
-      - Authentication
-      operationId: getAuthentication
+      - Authentication V1 (Cookies Based)
+      operationId: getAuthentication_1
       parameters:
       - name: request
         in: query
         required: true
         schema:
-          $ref: '#/components/schemas/AuthenticationRequest'
+          $ref: "#/components/schemas/LoginRequest"
       responses:
         "400":
           description: Bad Request
@@ -258,7 +591,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content: {}
@@ -286,7 +625,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: Success
           content:
@@ -319,7 +664,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: "#/components/schemas/ErrorResponse"
+        "502":
+          description: Bad Gateway
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
         "200":
           description: OK
           content:
@@ -343,7 +694,7 @@ components:
           type: string
         path:
           type: string
-    RegisterRequest:
+    RegisterUserRequest:
       required:
       - email
       - firstname
@@ -353,18 +704,24 @@ components:
       type: object
       properties:
         firstname:
+          minLength: 1
           type: string
         lastname:
+          minLength: 1
           type: string
         email:
+          minLength: 1
           type: string
         password:
+          minLength: 1
           type: string
         role:
           type: string
           enum:
           - ADMIN
           - USER
+          - RESTAURANT_OWNER
+          - DELIVERY_DRIVER
     AuthenticationResponse:
       type: object
       properties:
@@ -397,6 +754,13 @@ components:
           type: string
         token_type:
           type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
     ContentDisposition:
       type: object
       properties:
@@ -426,79 +790,28 @@ components:
           deprecated: true
         inline:
           type: boolean
-        formData:
-          type: boolean
         attachment:
           type: boolean
-    HttpMethod:
+        formData:
+          type: boolean
+    DefaultHttpStatusCode:
       type: object
-    HttpRange:
-      type: object
-    HttpStatusCode:
-      type: object
-      properties:
-        error:
-          type: boolean
-        is4xxClientError:
-          type: boolean
-        is5xxServerError:
-          type: boolean
-        is2xxSuccessful:
-          type: boolean
-        is1xxInformational:
-          type: boolean
-        is3xxRedirection:
-          type: boolean
-    MediaType:
+      allOf:
+      - $ref: "#/components/schemas/DefaultHttpStatusCode"
+    ChangePasswordRequest:
+      required:
+      - oldPassword
       type: object
       properties:
-        type:
+        oldPassword:
+          minLength: 1
           type: string
-        subtype:
+        newPassword:
           type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        qualityValue:
-          type: number
-          format: double
-        charset:
-          type: string
-        concrete:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-        wildcardType:
-          type: boolean
-        subtypeSuffix:
-          type: string
-    ProblemDetail:
+    ChangeEmailRequest:
       type: object
       properties:
-        type:
-          type: string
-          format: uri
-        title:
-          type: string
-        status:
-          type: integer
-          format: int32
-        detail:
-          type: string
-        instance:
-          type: string
-          format: uri
-        properties:
-          type: object
-          additionalProperties:
-            type: object
-    AuthenticationRequest:
-      type: object
-      properties:
-        email:
-          type: string
-        password:
+        newEmail:
           type: string
   securitySchemes:
     bearerAuth:
